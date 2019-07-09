@@ -1,39 +1,17 @@
-import React, { useState, useEffect } from "react"
-import axios from "axios"
+import React from "react"
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+
+import Users from "./Users"
+import UserPage from "./UserPage"
 
 const App = () => {
-    const [isLoading, setIsLoading] = useState(true)
-    const [users, setUsers] = useState([])
-
-    useEffect(() => {
-        axios
-            .get("/api/users")
-            .then(({ data }) => {
-                setUsers(data)
-            })
-            .catch(err => console.log(err))
-            .finally(() => setIsLoading(false))
-    }, [])
-
-    if (isLoading) {
-        return <h1>Loading...</h1>
-    }
     return (
-        <>
-            <h1>Users</h1>
-            <ul>
-                {users.map(({ id, name, bio, created_at }) => (
-                    <li key={id}>
-                        <h3>{name}</h3>
-                        <p>{bio}</p>
-                        <small>
-                            <span>Created on </span>
-                            {new Date(created_at).toLocaleDateString()}
-                        </small>
-                    </li>
-                ))}
-            </ul>
-        </>
+        <Router>
+            <Switch>
+                <Route exact path="/" component={Users} />
+                <Route exact path="/users/:id" component={UserPage} />
+            </Switch>
+        </Router>
     )
 }
 
