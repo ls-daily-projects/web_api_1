@@ -1,7 +1,7 @@
 import { Router } from "express"
 import { NotFound, BadRequest } from "http-errors"
 
-import { find, findById, remove, update } from "../model"
+import { find, findById, remove, update, insert } from "../model"
 
 const apiRouter = Router()
 
@@ -59,6 +59,29 @@ apiRouter.put("/users/:id", async (req, res, next) => {
         }
 
         const user = await findById(req.params.id)
+        return res.json(user)
+    } catch (error) {
+        next(error)
+    }
+})
+
+apiRouter.post("/users", async (req, res, next) => {
+    const { name, bio } = req.body
+
+    if (!name || !bio) {
+        return next(BadRequest("Please provide name and bio for the user."))
+    }
+
+    try {
+        const { id } = await insert({ name, bio })
+
+        if (!id) {
+            return next(
+                NotFound("The user with the specified ID does not exist.")
+            )
+        }
+
+        const user = await findById(id)
         return res.json(user)
     } catch (error) {
         next(error)
