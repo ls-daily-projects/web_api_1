@@ -6,7 +6,16 @@ export const handle404 = (req, _res, next) => {
     next(NotFound(msg))
 }
 
-export const handle500 = ({ status = 500, name, message }, _req, res, next) => {
+export const handle500 = (
+    {
+        status = 500,
+        name,
+        message = "The user information could not be retrieved."
+    },
+    _req,
+    res,
+    next
+) => {
     if (res.headersSent) return next()
     res.status(status).json({ name, statusCode: status, message })
 }
