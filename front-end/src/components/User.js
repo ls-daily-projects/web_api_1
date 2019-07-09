@@ -1,7 +1,18 @@
 import React from "react"
 import { Link } from "react-router-dom"
+import axios from "axios"
+import { withRouter } from "react-router-dom"
 
-const User = ({ id, name, bio, created_at }) => {
+const User = ({ id, name, bio, created_at, history }) => {
+    const handleDelete = async () => {
+        try {
+            await axios.delete(`/api/users/${id}`)
+            history.push("/")
+        } catch (error) {
+            alert(`Can't delete ${name} broooo!`)
+            console.log(error)
+        }
+    }
     return (
         <li>
             <Link to={`/users/${id}`}>
@@ -12,8 +23,9 @@ const User = ({ id, name, bio, created_at }) => {
                     {new Date(created_at).toLocaleDateString()}
                 </small>
             </Link>
+            <button onClick={handleDelete}>Delete</button>
         </li>
     )
 }
 
-export default User
+export default withRouter(User)
