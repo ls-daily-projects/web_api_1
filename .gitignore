@@ -18,6 +18,7 @@ build/
 .env.development.local
 .env.test.local
 .env.production.local
+*.db3
 
 # Logs
 logs
